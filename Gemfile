@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
-source 'https://rails-assets.org'
 
-gem 'rails', '4.1.9'
+gem 'rails', '~> 4.2'
 gem 'devise'
 gem 'omniauth-twitter'
 gem 'omniauth-github'
@@ -22,11 +21,19 @@ gem 'jquery-turbolinks'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'unicorn'
+
 gem 'rails_12factor', group: :production
 gem 'sdoc', '~> 0.4.0', group: :doc
-gem 'spring', group: :development
-gem 'pry-rails', group: :development
+
+group :development do
+	gem 'spring'
+	gem 'pry-rails'
+end
+
 gem 'codeclimate-test-reporter', group: :test, require: nil
-gem 'rails-assets-moment'
-gem 'rails-assets-fullcalendar'
-gem 'rails-assets-jquery-ui'
+
+source 'https://rails-assets.org' do
+	gem 'rails-assets-moment'
+	gem 'rails-assets-fullcalendar'
+	gem 'rails-assets-jquery-ui'
+end

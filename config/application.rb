@@ -29,5 +29,7 @@ module Clueshed
       legal: ENV['CLUESHED_LEGAL'] || nil,
       logo: ENV['CLUESHED_LOGO'] || 'logo.svg'
     }
+
+    config.active_support.test_order = :random
   end
 end
