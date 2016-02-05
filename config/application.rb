@@ -23,11 +23,11 @@ module Clueshed
     config.exceptions_app = self.routes
 
     config.clueshed = {
-      title: ENV['CLUESHED_TITLE'] || 'Interests and Contribs',
+      title: ENV['CLUESHED_TITLE'] || 'Interests and Contributions',
       subtitle: ENV['CLUESHED_SUBTITLE'] || 'This is your event. You decide what will happen.',
-      website: ENV['CLUESHED_WEBSITE'] || 'https://conc.at/',
+      website: ENV['CLUESHED_WEBSITE'] || 'https://barcamp-sbg.at/',
       legal: ENV['CLUESHED_LEGAL'] || nil,
-      logo: ENV['CLUESHED_LOGO'] || 'logo.svg'
+      logo: ENV['CLUESHED_LOGO'] || 'logo.png'
     }
 
     config.active_support.test_order = :random
