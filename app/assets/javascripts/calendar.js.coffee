@@ -20,7 +20,7 @@ restoreCal = ($cal, $items) ->
   $cal.fullCalendar 'addEventSource', events if events.length
   events.forEach (event) ->
     $("#event-#{event.id}").remove()
-  expandCal $cal, $items
+  # expandCal $cal, $items
 
 $ ->
   $items = $ '#items'
@@ -49,13 +49,13 @@ $ ->
         .append(
           $('<small>')
             .text(" by #{contrib.user.username}")
-          )
+        )
         .append(
           $('<span>')
             .addClass('badge')
             .text(contrib.votes)
-          )
         )
+      )
     unless res.length
       $list.append('<div>').addClass('list-group-item').text('No Contribs yet.')
 
@@ -65,12 +65,14 @@ $ ->
         expandCal()
         persistCal()
       header: left: '', center: '', right: ''
-      minTime: '08:00:00'
+      minTime: '09:00:00'
+      firstDay: 5
       maxTime: '19:00:00'
       editable: yes
-      defaultView: 'agendaDay'
+      defaultView: 'agendaWeek'
+      hiddenDays: [ 1, 2, 3, 4 ] 
       allDaySlot: no
-      defaultDate: '2015-07-03'
+      defaultDate: '2016-04-08'
       dayNames: do -> [0...7].map -> 'Event Day'
       businessHours:
         start: '09:00'
