@@ -18,6 +18,13 @@ class ContribsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should get new based on intrerest" do
+    @interest = interests(:one)
+    get :new, in_reply_to: @interest.id
+    assert_response :success
+  end
+
+
   test "should create contrib" do
     assert_difference('Contrib.count') do
       post :create, contrib: { description: @contrib.description, title: @contrib.title }

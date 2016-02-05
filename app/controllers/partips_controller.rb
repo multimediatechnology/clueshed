@@ -29,6 +29,12 @@ class PartipsController < ApplicationController
   # GET /partips/new
   def new
     instance model.new
+    Rails.logger.warn("creating new #{model}")
+    if new_params[:in_reply_to]
+      intr = Interest.find(new_params[:in_reply_to])
+      instance.title = intr.title
+      instance.description = "(Please describe what you can offer, here's the original request: #{intr.description})"
+    end
   end
 
   # GET /partips/1/edit
@@ -104,6 +110,9 @@ class PartipsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def partip_params
-      params.require(instance_name.to_sym).permit(:title, :description, :interest_id)
+      params.require(instance_name.to_sym).permit(:title, :description, :interest_id, :in_reply_to)
+    end
+    def new_params
+      params.permit(:in_reply_to)
     end
 end

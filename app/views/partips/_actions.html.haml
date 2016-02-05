@@ -1,7 +1,7 @@
 - use_buttons = false unless defined? use_buttons
 - btn_class = use_buttons ? 'btn btn-primary' : ''
 - if partip.class.name == 'Interest'
-  = link_to new_contrib_path(:in_reply_to => partip.id), class: btn_class, title: 'Reply' do
+  = link_to new_contrib_path(:in_reply_to => partip.id), class: btn_class, title: 'I can offer this!' do
     = icon('reply')
     - if use_buttons
       Reply
