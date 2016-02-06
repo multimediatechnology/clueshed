@@ -1,1 +1,1 @@
-json.array! @contribs, partial: 'partips/partip', as: :partip
+json.array! @contribs, :partial => "contrib",  :as => :contrib

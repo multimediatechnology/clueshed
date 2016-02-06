@@ -8,8 +8,8 @@ class ContribsControllerTest < ActionController::TestCase
   end
 
   test "should get index" do
-    get :index
-    assert_response :redirect
+    get :index, :format => :json
+    assert_response :success
     assert_not_nil assigns(:contribs)
   end
 
@@ -55,4 +55,18 @@ class ContribsControllerTest < ActionController::TestCase
 
     assert_redirected_to contribs_path
   end
+
+  test "should update all event data" do
+    assert_difference('Event.count', +1) do
+      post :bulk_update, contrib: [{:id=>@contrib.id, :event=>{:start=>"2016-04-08T11:00:00", :end=>"2016-04-08T13:00:00"}}]
+    end
+    assert_response :success
+  end
+
+  test "should reject updates of event data if contrib does not exist" do
+    assert_raises(ActiveRecord::RecordNotFound) do
+      post :bulk_update, contrib: [{:id=>"42", :event=>{:start=>"2016-04-08T11:00:00", :end=>"2016-04-08T13:00:00"}}]
+    end
+  end
+
 end

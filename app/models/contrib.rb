@@ -4,4 +4,8 @@ class Contrib < ActiveRecord::Base
   belongs_to :interest
   has_many :votes
   belongs_to :user
+  has_one :event
+
+
+
 end

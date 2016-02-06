@@ -2,25 +2,45 @@
 #= require jquery-ui
 #= require fullcalendar
 
+to_rails_params = (events) ->
+  # beware!  we are creating params with repeated keys
+  # therefore we cannot simply do a $.param( object ), 
+  # bcause object cannot contain repeated keys!
+  res = $.map events, (e) ->
+    $.param(
+      "contrib[][id]"           : e.contrib_id,    
+      "contrib[][event][start]" : e.start.format(),
+      "contrib[][event][end]"   : e.end.format()
+    )
+  .join("&")
+
+addToSidebar = ($list, contrib_data) ->
+  $list.append(
+    $('<div>')
+      .draggable(revert: true)
+      .data('event', contrib_data)
+      .addClass('list-group-item')
+      .attr('id', "event-#{contrib_data.contrib_id}")
+      .text(contrib_data.contrib_title)
+    .append(
+      $('<small>')
+        .text(" by #{contrib_data.username}")
+    )
+    .append(
+      $('<span>')
+        .addClass('badge')
+        .text(contrib_data.votes)
+    )
+  )
+
 expandCal = ($cal, $items) ->
   return if $items.children().length
   $items.parent().hide()
   $cal.parent().addClass('col-md-12').removeClass('col-md-6')
 
 persistCal = ($cal) ->
-  localStorage.setItem 'clueshed-calendar', JSON.stringify $cal.data('fullCalendar').clientEvents().map (event) ->
-    filtered = {}
-    Object.keys(event).forEach (key) ->
-      if !/^_/.test(key) and key isnt 'source'
-        filtered[key] = event[key]
-    filtered
-
-restoreCal = ($cal, $items) ->
-  events = (JSON.parse localStorage.getItem 'clueshed-calendar') or []
-  $cal.fullCalendar 'addEventSource', events if events.length
-  events.forEach (event) ->
-    $("#event-#{event.id}").remove()
-  # expandCal $cal, $items
+  all_ev = $cal.data('fullCalendar').clientEvents()
+  $.post('/contribs/bulk_update', to_rails_params( all_ev ) )  # fire and forget!
 
 $ ->
   $items = $ '#items'
@@ -28,38 +48,29 @@ $ ->
 
   expandCal = expandCal.bind null, $cal, $items
   persistCal = persistCal.bind null, $cal, $items
-  restoreCal = restoreCal.bind null, $cal, $items
 
   $.get '/contribs.json'
   .then (res) ->
     $list = $('#items').empty()
+    scheduled_events = []
     res.sort (contrib) -> -contrib.votes
     res.forEach (contrib) ->
-      $list.append(
-        $('<div>')
-          .draggable(revert: true)
-          .data('event',
-            title: "#{contrib.title} by #{contrib.user.username}"
-            duration: '00:30'
-            id: contrib.id
-          )
-          .addClass('list-group-item')
-          .attr('id', "event-#{contrib.id}")
-          .text(contrib.title)
-        .append(
-          $('<small>')
-            .text(" by #{contrib.user.username}")
-        )
-        .append(
-          $('<span>')
-            .addClass('badge')
-            .text(contrib.votes)
-        )
-      )
-    unless res.length
-      $list.append('<div>').addClass('list-group-item').text('No Contribs yet.')
-
+      if contrib.start
+        contrib.contrib_title = contrib.title 
+        contrib.title = "#{contrib.title} by #{contrib.username} (#{contrib.votes})"
+        scheduled_events.push( contrib )
+      else
+        contrib_data = {
+          title: "#{contrib.title} by #{contrib.username} (#{contrib.votes})",
+          contrib_title: contrib.title,
+          username: contrib.username,
+          contrib_id: contrib.contrib_id,   
+          duration: '00:30',
+          votes: contrib.votes
+        }
+        addToSidebar( $list, contrib_data )
     $cal.fullCalendar
+      events: scheduled_events
       drop: (data, event) ->
         $(event.target).remove()
         expandCal()
@@ -80,9 +91,13 @@ $ ->
       droppable: yes
       eventDrop: persistCal
       eventResize: persistCal
-      viewRender: do ->
-        firstrender = yes
-        ->
-          return unless firstrender
-          restoreCal()
-          firstrender = no
+      eventOverlap: (stillEvent, movingEvent) ->
+        !(stillEvent.username == movingEvent.username)
+        
+    expandCal $cal, $items
+
+
+    unless res.length
+      $list.append('<div>').addClass('list-group-item').text('No Contribs yet.')
+
+

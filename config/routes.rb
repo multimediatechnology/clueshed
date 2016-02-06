@@ -8,7 +8,12 @@ Rails.application.routes.draw do
   match '/users/:id/finish_signup' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
   resources :users, only: [:show], param: :username
   resources :votes, only: [:create, :destroy]
-  resources :interests, :contribs
+  resources :interests
+  resources :contribs do
+    collection do
+      post 'bulk_update'
+    end
+  end
   resources :calendar, only: [:index]
 
   get '/404', to: 'errors#show', code: '404'
