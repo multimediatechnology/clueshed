@@ -9,7 +9,7 @@ class ContribsControllerTest < ActionController::TestCase
   end
 
   test "should get index" do
-    get :index, :format => :json
+    get :index, format: :json
     assert_response :success
     assert_not_nil assigns(:contribs)
   end
@@ -20,38 +20,38 @@ class ContribsControllerTest < ActionController::TestCase
   end
 
   test "should get new based on intrerest" do
-    @interest = interests(:one)
-    get :new, in_reply_to: @interest.id
+    @interest=interests(:one)
+    get :new, params:{in_reply_to: @interest.id}
     assert_response :success
   end
 
 
   test "should create contrib" do
     assert_difference('Contrib.count') do
-      post :create, contrib: { description: @contrib.description, title: @contrib.title }
+      post :create, params:{contrib:{description: @contrib.description, title: @contrib.title }}
     end
 
     assert_redirected_to contrib_path(assigns(:contrib))
   end
 
   test "should show contrib" do
-    get :show, id: @contrib
+    get :show, params:{id:@contrib}
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @contrib
+    get :edit, params:{id: @contrib}
     assert_response :success
   end
 
   test "should update contrib" do
-    patch :update, id: @contrib, contrib: { description: @contrib.description, title: @contrib.title }
+    patch :update, params:{id: @contrib, contrib: { description: @contrib.description, title: @contrib.title } }
     assert_redirected_to contrib_path(assigns(:contrib))
   end
 
   test "should destroy contrib" do
     assert_difference('Contrib.count', -1) do
-      delete :destroy, id: @contrib
+      delete :destroy, params:{id: @contrib}
     end
 
     assert_redirected_to contribs_path
@@ -61,7 +61,7 @@ class ContribsControllerTest < ActionController::TestCase
     @user.is_admin = false
     @user.save!
     assert_difference('Event.count', 0) do
-      post :bulk_update, contrib: [{:id=>@contrib.id, :event=>{:start=>"2016-04-08T11:00:00", :end=>"2016-04-08T13:00:00"}}]
+      post :bulk_update, params: {contrib: [{id: @contrib.id, event: {start: "2016-04-08T11:00:00", end: "2016-04-08T13:00:00"}}] }
     end
     assert_response :success
   end  
@@ -70,7 +70,7 @@ class ContribsControllerTest < ActionController::TestCase
     @user.is_admin = true
     @user.save!    
     assert_difference('Event.count', +1) do
-      post :bulk_update, contrib: [{:id=>@contrib.id, :event=>{:start=>"2016-04-08T11:00:00", :end=>"2016-04-08T13:00:00"}}]
+      post :bulk_update, params: {contrib: [{id: @contrib.id, event: {start: "2016-04-08T11:00:00", end: "2016-04-08T13:00:00"}}] }
     end
     assert_response :success
   end
@@ -79,7 +79,7 @@ class ContribsControllerTest < ActionController::TestCase
     @user.is_admin = true
     @user.save!        
     assert_raises(ActiveRecord::RecordNotFound) do
-      post :bulk_update, contrib: [{:id=>"42", :event=>{:start=>"2016-04-08T11:00:00", :end=>"2016-04-08T13:00:00"}}]
+      post :bulk_update, params: {contrib: [{id: "42", event: {start: "2016-04-08T11:00:00", end: "2016-04-08T13:00:00"}}] }
     end
   end
 

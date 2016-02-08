@@ -168,6 +168,10 @@ GEM
     rails-assets-jquery-ui (1.11.4)
       rails-assets-jquery (>= 1.6)
     rails-assets-moment (2.11.2)
+    rails-controller-testing (0.1.0)
+      actionpack (~> 5.x)
+      actionview (~> 5.x)
+      activesupport (~> 5.x)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -265,6 +269,7 @@ DEPENDENCIES
   rails-assets-fullcalendar!
   rails-assets-jquery-ui!
   rails-assets-moment!
+  rails-controller-testing
   rails_12factor
   redcarpet (~> 3.0.0)
   sass-rails

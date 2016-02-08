@@ -25,6 +25,6 @@ class ContribsController < PartipsController
       Rails.logger.warn("user #{current_user} cannot update the schedule")
     end
 
-  	render(:text => 'true', :status => 200)
+  	render  plain: 'true', status: 200
   end
 end

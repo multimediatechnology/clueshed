@@ -23,7 +23,8 @@ class VotesController < ApplicationController
 
     unless own?(vote)
       vote.errors.add(:base, "You must not destroy votes of others.")
-      return render json: vote.errors, status: :unauthorized
+      render json: vote.errors, status: :unauthorized
+      return
     end
 
     vote.destroy
