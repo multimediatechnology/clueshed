@@ -21,4 +21,7 @@ Rails.application.routes.draw do
   get '/404', to: 'errors#show', code: '404'
   get '/422', to: 'errors#show', code: '422'
   get '/500', to: 'errors#show', code: '500'
+
+  # Serve websocket cable requests in-process
+  # mount ActionCable.server => '/cable'  
 end
