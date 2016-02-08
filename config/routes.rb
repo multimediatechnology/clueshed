@@ -14,7 +14,9 @@ Rails.application.routes.draw do
       post 'bulk_update'
     end
   end
-  resources :calendar, only: [:index]
+
+  get '/calendar', to: 'calendar#index'
+  post '/calendar/reset', to: 'calendar#reset'
 
   get '/404', to: 'errors#show', code: '404'
   get '/422', to: 'errors#show', code: '422'

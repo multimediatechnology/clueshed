@@ -1,7 +1,19 @@
 - content_for :js do
+  %script
+    - if current_user && current_user.is_admin
+      window.is_admin = true;
+    - else
+      window.is_admin = false;
   = javascript_include_tag 'calendar', 'data-turbolinks-track' => true
 
 .col-md-4
+  - if current_user && current_user.is_admin
+    .panel.panel-default
+      .panel-heading
+        %strong Admin
+      .list-group
+        .list-group-item 
+          = button_to "Clear Calendar", calendar_reset_path
   .panel.panel-default
     .panel-heading
       %strong Contribs

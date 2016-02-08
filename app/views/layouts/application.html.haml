@@ -14,8 +14,8 @@
             = image_tag(@config[:logo])
       .row
         .col-md-12.text-center
-          %h1= @config[:title]
-          %p.lead= @config[:subtitle]
+          %h1= ( @title||=@config[:title] )
+          %p.lead= ( @subtitle||=@config[:subtitle] )
     - if flash.count > 0
       .container.flash
         - flash.each do |key, value|
@@ -34,9 +34,9 @@
             %span.glyphicon.glyphicon-chevron-up
         .collapse.navbar-collapse
           %ul.nav.navbar-nav
-            %li= link_to 'Home', :root
-            %li= link_to 'Event', @config[:website]
-            %li= link_to 'Calender', calendar_index_path
+            %li= link_to 'Frontpage', :root
+            %li= link_to 'Calender', calendar_path            
+            %li= link_to 'Barcamp Homepage', @config[:website]
             %li= link_to 'GitHub', 'https://github.com/multimediatechnology/clueshed'
             %li= link_to 'Legal', @config[:legal] if @config[:legal]
             = yield :footer_links

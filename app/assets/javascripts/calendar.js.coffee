@@ -15,10 +15,11 @@ to_rails_params = (events) ->
   .join("&")
 
 addToSidebar = ($list, contrib_data) ->
+  $d = $('<div>')
+  if window.is_admin
+    $d.draggable(revert: true)
   $list.append(
-    $('<div>')
-      .draggable(revert: true)
-      .data('event', contrib_data)
+    $d.data('event', contrib_data)
       .addClass('list-group-item')
       .attr('id', "event-#{contrib_data.contrib_id}")
       .text(contrib_data.contrib_title)
@@ -79,7 +80,7 @@ $ ->
       minTime: '09:00:00'
       firstDay: 5
       maxTime: '19:00:00'
-      editable: yes
+      editable: window.is_admin
       defaultView: 'agendaWeek'
       hiddenDays: [ 1, 2, 3, 4 ] 
       allDaySlot: no
